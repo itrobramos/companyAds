@@ -130,7 +130,7 @@ h3 {
   padding: 0 35px 0 19px;
   color: #999; }
   .form-control:focus {
-    border-color: #8eb852; }
+    border-color: #4e73df; }
   .form-control::-webkit-input-placeholder {
     color: #999; }
   .form-control::-moz-placeholder {
@@ -157,7 +157,7 @@ h3 {
     align-items: center;
     color: #fff;
     cursor: pointer;
-    background: #8eb852;
+    background: #4e73df;
     text-transform: uppercase;
     justify-content: center;
     letter-spacing: 1px;
@@ -374,3 +374,39 @@ table.cart {
       border-top: 1px solid #e6e6e6; } }
 
 /*# sourceMappingURL=style.css.map */
+
+
+.faicon {
+  padding: 10px;
+  font-size: 25px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+  width:45px;
+}
+
+
+.faicon:hover {
+    opacity: 0.7;
+}
+
+.fa-facebook {
+  background: #3B5998;
+  color: white;
+}
+
+.fa-twitter {
+  background: #55ACEE;
+  color: white;
+}
+
+
+.fa-youtube {
+  background: #bb0000;
+  color: white;
+}
+
+.fa-instagram {
+  background: #e4405f;
+  color: white;
+}

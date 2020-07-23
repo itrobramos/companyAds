@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{{env('DEPLOY_URL')}}/assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="{{env('DEPLOY_URL')}}/assets/css/Footer-with-social-media-icons.css">
 
+        <script src="{{env('DEPLOY_URL')}}/assets/js/jquery.min.js"></script>
+
 </head>
 
 <body id="page-top">
@@ -25,9 +27,10 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="home"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="categories"><i class="fas fa-table"></i><span>Categorías</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="subcategories"><i class="fas fa-table"></i><span>Subcategorías</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active" href="{{url('home')}}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="{{url('categories')}}"><i class="fas fa-table"></i><span>Categorías</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="{{url('subcategories')}}"><i class="fas fa-table"></i><span>Subcategorías</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="{{url('companies')}}"><i class="fas fa-table"></i><span>Empresas</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -123,8 +126,8 @@
                                     <li class="list-inline-item"><a href="#"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a></li>
                                     <li class="list-inline-item"><a href="#"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a></li>
                                     <li class="list-inline-item"><a href="#"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-instagram fa-stack-1x fa-inverse"></i></span></a></li>
-                                    <li class="list-inline-item"><a href="#"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-pinterest fa-stack-1x fa-inverse"></i></span></a></li>
                                 </ul>
+                                <br>
                                 <p class="copyright text-muted text-center">Copyright © VR 2020 </p>
                             </div>
                         </div>
@@ -133,7 +136,7 @@
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
-    <script src="{{env('DEPLOY_URL')}}/assets/js/jquery.min.js"></script>
+
     <script src="{{env('DEPLOY_URL')}}/assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="{{env('DEPLOY_URL')}}/assets/js/chart.min.js"></script>
     <script src="{{env('DEPLOY_URL')}}/assets/js/bs-init.js"></script>
