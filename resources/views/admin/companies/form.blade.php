@@ -53,7 +53,7 @@
                             <div class="col-md-3"></div>
                             <div class="col-md-6">
                                 <div class="form-holder w-100">
-                                    <input type="name" class="form-control" placeholder="Nombre">
+                                    <input type="text" name="name" class="form-control" placeholder="Nombre">
                                 </div>
                             </div>
                         </div>
@@ -72,6 +72,47 @@
                     <section>
                         <h3>Ubicación</h3>
                         <br>
+                        
+                        <div class="form-row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="form-holder w-100">
+                                    <select class="form-control" name="country">
+                                        @foreach($Countries as $Country)
+                                            <option val="{{$Country->id}}">{{$Country->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+
+                        <div class="form-row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="form-holder w-100">
+                                    <select class="form-control" name="state">
+                                        @foreach($States as $State)
+                                            <option val="{{$State->id}}">{{$State->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+
+                        <div class="form-row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="form-holder w-100">
+                                    <select class="form-control" name="city">
+                                        @foreach($Cities as $City)
+                                            <option val="{{$City->id}}">{{$City->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+
+
                         <div class="form-row">
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
@@ -84,7 +125,7 @@
                             <div class="col-md-3"></div>
                             <div class="col-md-6">
                                 <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="address" placeholder="Codigo Postal">
+                                        <input type="text" class="form-control" name="zipcode" placeholder="Código Postal">
                                 </div>
                             </div>
                         </div>
@@ -101,12 +142,12 @@
                                 <div class="col-md-3"></div>
                                 <div class="col-md-2">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="phoneDescription" placeholder="Nombre">
+                                        <input type="text" class="form-control" name="phone[description][1]" placeholder="Nombre">
                                     </div>                                
                                 </div> 
                                 <div class="col-md-3">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="phone" placeholder="Teléfono">
+                                        <input type="text" class="form-control" name="phone[number][1]" placeholder="Teléfono">
                                     </div>                                
                                 </div> 
                                 <div class="col-md-2">
@@ -142,7 +183,7 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="phone" placeholder="Sitio web">
+                                        <input type="text" class="form-control" name="website" placeholder="Sitio web">
                                     </div>                                
                                 </div> 
                             </div>
@@ -156,7 +197,7 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="phone" placeholder="Facebook">
+                                        <input type="text" class="form-control" name="facebook" placeholder="Facebook">
                                     </div>                                
                                 </div> 
                             </div>
@@ -168,7 +209,7 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="phone" placeholder="Youtube">
+                                        <input type="text" class="form-control" name="youtube" placeholder="Youtube">
                                     </div>                                
                                 </div> 
                             </div>
@@ -180,7 +221,7 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="phone" placeholder="Instagram">
+                                        <input type="text" class="form-control" name="instagram" placeholder="Instagram">
                                     </div>                                
                                 </div> 
                             </div>
@@ -192,17 +233,10 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="phone" placeholder="Twitter">
+                                        <input type="text" class="form-control" name="twitter" placeholder="Twitter">
                                     </div>                                
                                 </div> 
                             </div>
-
-                           
-
-                            
-
-
-    
 
                         </div>
 
@@ -271,12 +305,12 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-2">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="phoneDescription[${i}]" placeholder="Nombre">
+                                        <input type="text" class="form-control" name="phone[description][${i}]" placeholder="Nombre">
                                     </div>                                
                                 </div> 
                         <div class="col-md-3">
                             <div class="form-holder w-100">
-                                <input type="text" class="form-control" name="phone[${i}]" placeholder="Teléfono">
+                                <input type="text" class="form-control" name="phone[number][${i}]" placeholder="Teléfono">
                             </div>                                
                         </div> 
                         <div class="col-md-1">

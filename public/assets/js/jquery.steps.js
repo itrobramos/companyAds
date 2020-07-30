@@ -1056,6 +1056,7 @@ function renderPagination(wizard, options, state)
     {
         var pagination = "<{0} class=\"actions {1}\"><ul role=\"menu\" aria-label=\"{2}\">{3}</ul></{0}>",
             buttonTemplate = "<li><a href=\"#{0}\" role=\"menuitem\">{1}</a></li>",
+            submitTemplate = "<li><a href=\"#{0}\" onclick='document.getElementById(\"form\").submit();' role=\"menuitem\">{1}</a></li>",
             buttons = "";
 
         if (!options.forceMoveForward)
@@ -1067,7 +1068,7 @@ function renderPagination(wizard, options, state)
 
         if (options.enableFinishButton)
         {
-            buttons += buttonTemplate.format("finish", options.labels.finish);
+            buttons += submitTemplate.format("finish", options.labels.finish);
         }
 
         if (options.enableCancelButton)
