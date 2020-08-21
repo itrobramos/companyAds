@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
+use App\Category;
+use App\Subcategory;
 use App\City;
 use App\Company;
 use App\Country;
@@ -51,20 +53,52 @@ class CompaniesController extends Controller
         $Countries = Country::where('active',1)->get();
         $States = State::where('active',1)->where('countryId', $Countries->first()->id)->get();
         $Cities = City::where('active',1)->where('stateId', $States->first()->id)->get();
+        $Categories = Category::all();
+        $Subcategories = Subcategory::all();
 
         $data['Countries'] = $Countries;
         $data['States'] = $States;
         $data['Cities'] = $Cities;
+        $data['Categories'] = $Categories;
+        $data['Subcategories'] = $Subcategories;
         
         return view('admin/companies.create', $data);
     }
 
-    // public function edit($id)
-    // {
-    //     $category = Category::findOrFail($id);
-    //     $data['category'] = $category;
-    //     return view('admin/companies.edit', $data);
-    // }
+    public function edit($id)
+    {
+        $company = Company::findOrFail($id);
+        $Countries = Country::where('active',1)->get();
+        $States = State::where('active',1)->where('countryId', $Countries->first()->id)->get();
+        $Cities = City::where('active',1)->where('stateId', $States->first()->id)->get();
+        $Branch = Branch::where('companyId',$id)->first();
+        $Admin = User::findOrFail($company->userId);
+
+        $Categories = Category::all();
+        $Subcategories = Subcategory::all();
+
+        $SocialNetworks = SocialNetwork::where('companyId', $id)->where('active',1)->get();
+        
+        $SocialNetworksT = [];
+        foreach($SocialNetworks as $SN){
+            $SocialNetworksT[] = ["Type"=> $SN->SocialNetworkType->name, "URL" => $SN->URL];
+        }
+
+
+        $company->socialNetworks = $SocialNetworksT;
+        $company->Admin = $Admin;
+
+        $data['Countries'] = $Countries;
+        $data['States'] = $States;
+        $data['Cities'] = $Cities;
+        $data['company'] = $company;
+        $data['Branch'] = $Branch;
+        $data['Categories'] = $Categories;
+        $data['Subcategories'] = $Subcategories;
+
+
+        return view('admin/companies.edit', $data);
+    }
 
 
     public function store(Request $request)

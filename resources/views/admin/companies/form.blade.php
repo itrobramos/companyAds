@@ -53,7 +53,7 @@
                             <div class="col-md-3"></div>
                             <div class="col-md-6">
                                 <div class="form-holder w-100">
-                                    <input type="text" name="name" class="form-control" placeholder="Nombre">
+                                    <input type="text" name="name" class="form-control" placeholder="Nombre" value="@if(isset($company->name)){{$company->name}}@endif">
                                 </div>
                             </div>
                         </div>
@@ -61,10 +61,48 @@
                             <div class="col-md-3"></div>
                             <div class="col-md-6">
                                 <div class="form-holder w-100">
-                                    <textarea class="form-control" name="description" rows="5" placeholder="Descripción"></textarea
+                                    <textarea class="form-control" name="description" rows="5" placeholder="Descripción">@if(isset($company->description)){{$company->description}}@endif</textarea>
                                 </div>
                             </div>
                         </div>
+
+                        
+                        <div class="form-row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="form-holder w-100">
+                                    <select class="form-control" name="category">
+                                        @foreach($Categories as $Category)
+                                            @if(isset($company->Subcategory->Category->id) && $company->Subcategory->Category->id == $Category->id)
+                                            <option val="{{$Category->id}}" selected>{{$Category->name}}</option>
+                                            @else
+                                            <option val="{{$Category->id}}">{{$Category->name}}</option>
+                                            @endif
+
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+
+
+                        <div class="form-row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="form-holder w-100">
+                                    <select class="form-control" name="subcategory">
+                                        @foreach($Subcategories as $Subcategory)
+                                            @if(isset($company->subcategory->id) && $company->subcategory->id == $Subcategory->id)
+                                            <option val="{{$Subcategory->id}}" selected>{{$Subcategory->name}}</option>
+                                            @else
+                                            <option val="{{$Subcategory->id}}">{{$Subcategory->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+
                     </section>
 
                     <!-- SECTION UBICACION -->
@@ -79,6 +117,9 @@
                             <div class="form-holder w-100">
                                     <select class="form-control" name="country">
                                         @foreach($Countries as $Country)
+                                            @if(isset($Branch->City->State->Country->id) && $Branch->City->State->countryId == $Country->id)
+                                            <option val="{{$Country->id}}" selected>{{$Country->name}}</option>
+                                            @endif
                                             <option val="{{$Country->id}}">{{$Country->name}}</option>
                                         @endforeach
                                     </select>
@@ -92,6 +133,9 @@
                             <div class="form-holder w-100">
                                     <select class="form-control" name="state">
                                         @foreach($States as $State)
+                                            @if(isset($Branch->City->State->id) && $Branch->City->stateid == $State->id)
+                                            <option val="{{$State->id}}" selected>{{$State->name}}</option>
+                                            @endif
                                             <option val="{{$State->id}}">{{$State->name}}</option>
                                         @endforeach
                                     </select>
@@ -105,6 +149,9 @@
                             <div class="form-holder w-100">
                                     <select class="form-control" name="city">
                                         @foreach($Cities as $City)
+                                            @if(isset($Branch->City->id) && $Branch->City->id == $City->id)
+                                            <option val="{{$City->id}}" selected>{{$City->name}}</option>
+                                            @endif
                                             <option val="{{$City->id}}">{{$City->name}}</option>
                                         @endforeach
                                     </select>
@@ -117,7 +164,7 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <div class="form-holder w-100">
-                                    <input type="text" class="form-control" name="address" placeholder="Dirección">
+                                    <input type="text" class="form-control" name="address" placeholder="Dirección" value="@if(isset($Branch->address)){{$Branch->address}}@endif">
                                 </div>
                             </div> 
                         </div>
@@ -125,7 +172,7 @@
                             <div class="col-md-3"></div>
                             <div class="col-md-6">
                                 <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="zipcode" placeholder="Código Postal">
+                                        <input type="text" class="form-control" name="zipcode" placeholder="Código Postal" value="@if(isset($Branch->zipcode)){{$Branch->zipcode}}@endif">
                                 </div>
                             </div>
                         </div>
@@ -170,7 +217,7 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="email" class="form-control" name="email" placeholder="Email">
+                                        <input type="email" class="form-control" name="email" placeholder="Email" value="@if(isset($company->email)){{$company->email}}@endif">
                                     </div>                                
                                 </div> 
                             </div>
@@ -183,7 +230,7 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="website" placeholder="Sitio web">
+                                        <input type="text" class="form-control" name="website" placeholder="Sitio web" value="@if(isset($company->website)){{$company->website}}@endif">
                                     </div>                                
                                 </div> 
                             </div>
@@ -197,7 +244,18 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="facebook" placeholder="Facebook">
+                                        @php ($fb = 0)
+                                        @if(isset($company->socialNetworks))
+                                        @foreach($company->socialNetworks as $SN)                                        
+                                            @if($SN['Type'] == "Facebook")
+                                            <input type="text" class="form-control" name="facebook" placeholder="Facebook" value="{{$SN['URL']}}">
+                                            @php ($fb = 1)
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                        @if($fb == 0)
+                                            <input type="text" class="form-control" name="facebook" placeholder="Facebook">
+                                        @endif
                                     </div>                                
                                 </div> 
                             </div>
@@ -209,7 +267,18 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="youtube" placeholder="Youtube">
+                                        @php ($yt = 0)
+                                        @if(isset($company->socialNetworks))
+                                        @foreach($company->socialNetworks as $SN)                                        
+                                            @if($SN['Type'] == "Youtube")
+                                            <input type="text" class="form-control" name="youtube" placeholder="Youtube" value="{{$SN['URL']}}">
+                                            @php ($yt = 1)
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                        @if($yt == 0)
+                                            <input type="text" class="form-control" name="youtube" placeholder="Youtube">
+                                        @endif
                                     </div>                                
                                 </div> 
                             </div>
@@ -221,7 +290,18 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="instagram" placeholder="Instagram">
+                                        @php ($ins = 0)
+                                        @if(isset($company->socialNetworks))
+                                        @foreach($company->socialNetworks as $SN)                                        
+                                            @if($SN['Type'] == "Instagram")
+                                            <input type="text" class="form-control" name="instagram" placeholder="Instagram" value="{{$SN['URL']}}">
+                                            @php ($ins = 1)
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                        @if($ins == 0)
+                                            <input type="text" class="form-control" name="instagram" placeholder="Instagram">
+                                        @endif
                                     </div>                                
                                 </div> 
                             </div>
@@ -233,7 +313,18 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="twitter" placeholder="Twitter">
+                                        @php ($tw = 0)
+                                        @if(isset($company->socialNetworks))
+                                        @foreach($company->socialNetworks as $SN)                                        
+                                            @if($SN['Type'] == "Twitter")
+                                            <input type="text" class="form-control" name="twitter" placeholder="Twitter" value="{{$SN['URL']}}">
+                                            @php ($tw = 1)
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                        @if($tw == 0)
+                                            <input type="text" class="form-control" name="twitter" placeholder="Twitter">
+                                        @endif
                                     </div>                                
                                 </div> 
                             </div>
@@ -252,12 +343,12 @@
                             <div class="col-md-3"></div>
                             <div class="col-md-3">
                                 <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="adminName" placeholder="Nombre">
+                                        <input type="text" class="form-control" name="adminName" placeholder="Nombre" value="@if(isset($company->Admin->first_name)){{$company->Admin->first_name}}@endif">
                                     </div>
                             </div> 
                             <div class="col-md-3">
                                 <div class="form-holder w-100">
-                                        <input type="text" class="form-control" name="adminLastName" placeholder="Apellido">
+                                        <input type="text" class="form-control" name="adminLastName" placeholder="Apellido" value="@if(isset($company->Admin->last_name)){{$company->Admin->last_name}}@endif">
                                     </div>
                                 </div> 
                         </div>
@@ -266,7 +357,7 @@
                             <div class="col-md-3"></div>
                             <div class="col-md-6">
                                 <div class="form-holder w-100">
-                                        <input type="email" class="form-control" name="adminEmail" placeholder="Email">
+                                        <input type="email" class="form-control" name="adminEmail" placeholder="Email" value="@if(isset($company->Admin->email)){{$company->Admin->email}}@endif">
                                 </div>
                             </div> 
                         </div>

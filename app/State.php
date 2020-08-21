@@ -8,4 +8,8 @@ class State extends Model
 {
     public $timestamps = true;
     
+    public function Country()
+    {
+        return $this->belongsTo('App\Country', 'countryId', 'id');
+    }
 }

@@ -18,9 +18,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
-
 
 
 // Categories
@@ -39,6 +37,15 @@ Route::get('/subcategories/{id}/edit', "SubcategoriesController@edit");
 Route::post('/subcategories', 'SubcategoriesController@store');
 Route::patch('/subcategories/{id}','SubcategoriesController@update');
 Route::delete('/subcategories/{id}', 'SubcategoriesController@destroy');
+
+
+// Companies
+Route::get('/companies', 'CompaniesController@index');
+Route::get('/companies/create',"CompaniesController@create");
+Route::get('/companies/{id}/edit', "CompaniesController@edit");
+Route::post('/companies', 'CompaniesController@store');
+Route::patch('/companies/{id}','CompaniesController@update');
+Route::delete('/companies/{id}', 'CompaniesController@destroy');
 
 
 Route::get('auth/{provider}', 'Auth\SocialAuthController@redirectToProvider')->name('social.auth');
