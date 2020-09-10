@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table align-items-center table-flush" id="datatable">
+                <table class="table align-items-center table-hover" id="datatable">
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">Nombre</th>

@@ -71,12 +71,12 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <div class="form-holder w-100">
-                                    <select class="form-control" name="category">
+                                    <select class="form-control" name="category" onchange="loadSubcategories(this);">
                                         @foreach($Categories as $Category)
                                             @if(isset($company->Subcategory->Category->id) && $company->Subcategory->Category->id == $Category->id)
-                                            <option val="{{$Category->id}}" selected>{{$Category->name}}</option>
+                                            <option value="{{$Category->id}}" selected>{{$Category->name}}</option>
                                             @else
-                                            <option val="{{$Category->id}}">{{$Category->name}}</option>
+                                            <option value="{{$Category->id}}">{{$Category->name}}</option>
                                             @endif
 
                                         @endforeach
@@ -90,14 +90,7 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <div class="form-holder w-100">
-                                    <select class="form-control" name="subcategory">
-                                        @foreach($Subcategories as $Subcategory)
-                                            @if(isset($company->subcategory->id) && $company->subcategory->id == $Subcategory->id)
-                                            <option val="{{$Subcategory->id}}" selected>{{$Subcategory->name}}</option>
-                                            @else
-                                            <option val="{{$Subcategory->id}}">{{$Subcategory->name}}</option>
-                                            @endif
-                                        @endforeach
+                                    <select class="form-control" name="subcategory" id="cmbSubCategories">
                                     </select>
                                 </div>
                             </div> 
@@ -115,12 +108,12 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <div class="form-holder w-100">
-                                    <select class="form-control" name="country">
+                                    <select class="form-control" name="country"  onchange="loadStates(this);">
                                         @foreach($Countries as $Country)
                                             @if(isset($Branch->City->State->Country->id) && $Branch->City->State->countryId == $Country->id)
-                                            <option val="{{$Country->id}}" selected>{{$Country->name}}</option>
+                                            <option value="{{$Country->id}}" selected>{{$Country->name}}</option>
                                             @endif
-                                            <option val="{{$Country->id}}">{{$Country->name}}</option>
+                                            <option value="{{$Country->id}}">{{$Country->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -131,13 +124,8 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <div class="form-holder w-100">
-                                    <select class="form-control" name="state">
-                                        @foreach($States as $State)
-                                            @if(isset($Branch->City->State->id) && $Branch->City->stateid == $State->id)
-                                            <option val="{{$State->id}}" selected>{{$State->name}}</option>
-                                            @endif
-                                            <option val="{{$State->id}}">{{$State->name}}</option>
-                                        @endforeach
+                                    <select class="form-control" name="state" id="cmbStates"  onchange="loadCities(this);">
+                                 
                                     </select>
                                 </div>
                             </div> 
@@ -147,13 +135,8 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <div class="form-holder w-100">
-                                    <select class="form-control" name="city">
-                                        @foreach($Cities as $City)
-                                            @if(isset($Branch->City->id) && $Branch->City->id == $City->id)
-                                            <option val="{{$City->id}}" selected>{{$City->name}}</option>
-                                            @endif
-                                            <option val="{{$City->id}}">{{$City->name}}</option>
-                                        @endforeach
+                                    <select class="form-control" name="city" id="cmbCities">
+                                       
                                     </select>
                                 </div>
                             </div> 
@@ -420,6 +403,81 @@
         $("#" + i).remove();
     }
 
+    function loadStates(state){
+
+        $('#cmbStates').html(""); 
+        var id = state.value;
+        
+        $.ajax({
+            url: "../states/"+id
+        }).done(function(data) {
+
+            var html = "";
+            var cont = 0;
+
+            if(data["statusCode"] == 0){
+                $.each(data["resultset"], function(index) {
+                    html += "<option value='" + data["resultset"][cont]["id"] + "'>" + data["resultset"][cont]["name"] + "</option>";
+                    cont++;
+                });
+            }
+
+            $('#cmbStates').append(html);
+            $('#cmbStates').change(); 
+        });
+
+        
+    }
+
+
+    function loadCities(state){
+
+
+        $('#cmbCities').html(""); 
+
+        var id = state.value;
+
+        $.ajax({
+            url: "../cities/"+id
+        }).done(function(data) {
+
+            var html = "";
+            var cont = 0;
+
+            if(data["statusCode"] == 0){
+                $.each(data["resultset"], function(index) {
+                    html += "<option value='" + data["resultset"][cont]["id"] + "'>" + data["resultset"][cont]["name"] + "</option>";
+                    cont++;
+                });
+            }
+
+            $('#cmbCities').append(html); 
+        });
+    }
+
+    function loadSubcategories(category){
+
+        $('#cmbSubcategories').empty(); 
+
+        var id = category.value;
+
+        $.ajax({
+            url: "../subcategories/"+id
+        }).done(function(data) {
+
+            var html = "";
+            var cont = 0;
+
+            if(data["statusCode"] == 0){
+                $.each(data["resultset"], function(index) {
+                    html += "<option value='" + data["resultset"][cont]["id"] + "'>" + data["resultset"][cont]["name"] + "</option>";
+                    cont++;
+                });
+            }
+
+            $('#cmbSubCategories').empty().append(html); 
+        });
+    }
 </script>
 
 

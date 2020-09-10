@@ -99,4 +99,24 @@ class SubcategoriesController extends Controller
         Subcategory::destroy($id);
         return redirect('subcategories')->with('Message', 'Subcategoría eliminada correctamente');
     }
+
+    public function getSubcategoriesByCategory($id){
+        $subcategories = Subcategory::where('CategoryId', $id)->select('id','name')->get();
+        $subcategories = $subcategories->sortBy('name');
+
+        $response = collect([
+            "statusCode" => 0,
+            "statusMessage" => "OK",
+            "resultset" => ""
+        ]);
+
+
+        if($subcategories->Count() == 0){
+            $response['statusCode'] = 1;
+        }
+   
+        $response['resultset'] = $subcategories;
+
+        return response()->json($response, 200);
+    }
 }

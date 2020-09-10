@@ -50,3 +50,7 @@ Route::delete('/companies/{id}', 'CompaniesController@destroy');
 
 Route::get('auth/{provider}', 'Auth\SocialAuthController@redirectToProvider')->name('social.auth');
 Route::get('auth/{provider}/callback', 'Auth\SocialAuthController@handleProviderCallback');
+
+Route::get('/states/{id}', 'LocationController@getStatesByCountry');
+Route::get('/cities/{id}', 'LocationController@getcitiesByState');
+Route::get('/subcategories/{id}', 'SubcategoriesController@getSubcategoriesByCategory');

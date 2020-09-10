@@ -96,7 +96,6 @@ class CompaniesController extends Controller
         $data['Categories'] = $Categories;
         $data['Subcategories'] = $Subcategories;
 
-
         return view('admin/companies.edit', $data);
     }
 
@@ -104,118 +103,145 @@ class CompaniesController extends Controller
     public function store(Request $request)
     {
 
-        $CityName = $request->city; 
-        $StateName =  $request->state; 
-        $CountryName =  $request->country;
+        try{
+            \DB::beginTransaction();
 
-        $address= $request->address . " " . $request->zipcode . " "  . $CityName . " " . $StateName . " " . $CountryName ;
-        $geoDecode = $this->geoencoding($address);
-
-        $Latitude = $geoDecode[0]->lat;
-        $Longitude = $geoDecode[0]->lon;
-
-        
-        //Registro de Usuario
-        $User = new User();
-        $User->first_name = $request->adminName;
-        $User->last_name = $request->adminLastName;
-        $User->email = $request->adminEmail;
-        $User->password =  Hash::make('12345678');
-        $User->save();
-
-        //Registro de Compañia
-        $Company = new Company();
-        $Company->name = $request->name;
-        $Company->description = $request->description;
-        $Company->active = 1;
-
-        if ($request->hasfile('imageUrl')) {
-            $file = $request->file('imageUrl');
-            $extension = $file->getClientOriginalExtension(); // getting image extension
-            $filename = time() . '.' . $extension;
-            $file->move('public/uploads/images/', $filename);
-            File::delete($Company->logoUrl);
-            $Company->logoUrl = 'public/uploads/images/' . $filename;
-        }
-
-        $Company->userId = $User->id;
-        $Company->email = $request->email;
-        $Company->website = $request->website;
-        $Company->save();
-
-
-        //Registro de Sucursal
-        $Branch = new Branch();
-        $Branch->companyId = $Company->id;
-        $Branch->name='Base';
-        $Branch->address= $request->address;
-        $Branch->zipcode = $request->zipcode;
-        $Branch->cityId = City::where('name', $request->city)->first()->id;
-        $Branch->latitude = $Latitude;
-        $Branch->longitude = $Longitude;
-        $Branch->save();
-
-        //Registro de Teléfonos
-        if(isset($request->phone)){
-            foreach($request->phone['description'] as $key => $name)
-            {
-                $Phone = new Phone();
-                if(isset(($name)))
-                    $Phone->name = $name;
-
-                if(isset($request->phone['number'][$key]))
-                    $Phone->number = $request->phone['number'][$key];
-
-                $Phone->branchId = $Branch->id;
-
-                $Phone->save();                   
+            $City = City::find($request->city);
+            $CityName = $City->name;
+            $StateName =  $City->State->name; 
+            $CountryName =  $City->State->Country->name;
+    
+            $address= $request->address . " " . $request->zipcode . " "  . $CityName . " " . $StateName . " " . $CountryName ;
+    
+            $geoDecode = $this->geoencoding($address);
+    
+            if(isset($geoDecode->error)){
+                $Latitude = 0;
+                $Longitude = 0;
             }
+            else{
+                $Latitude = $geoDecode[0]->lat;
+                $Longitude = $geoDecode[0]->lon;    
+            }
+
+
+            //Registro de Usuario
+            $User = new User();
+            $User->first_name = $request->adminName;
+            $User->last_name = $request->adminLastName;
+            $User->email = $request->adminEmail;
+            $User->password =  Hash::make('12345678');
+            $User->save();
+    
+             //Registro de Compañia
+            $Company = new Company();
+            $Company->name = $request->name;
+            $Company->description = $request->description;
+            $Company->active = 1;
+            $Company->subcategoryId = $request->subcategory;
+ 
+            
+            if ($request->hasfile('imageUrl')) {
+                $file = $request->file('imageUrl');
+                $extension = $file->getClientOriginalExtension(); // getting image extension
+                $filename = time() . '.' . $extension;
+                $file->move('public/uploads/images/', $filename);
+                File::delete($Company->logoUrl);
+                $Company->logoUrl = 'public/uploads/images/' . $filename;
+            }
+    
+            
+            $Company->userId = $User->id;
+            $Company->email = $request->email;
+            $Company->website = $request->website;
+            $Company->save();
+
+
+            //Registro de Sucursal
+            $Branch = new Branch();
+            $Branch->companyId = $Company->id;
+            $Branch->name='Base';
+            $Branch->address= $request->address;
+            $Branch->zipcode = $request->zipcode;
+            $Branch->cityId = $City->id;
+            $Branch->latitude = $Latitude;
+            $Branch->longitude = $Longitude;
+            $Branch->save();
+        
+            //Registro de Teléfonos
+            if(isset($request->phone)){
+                foreach($request->phone['description'] as $key => $name)
+                {
+                    $Phone = new Phone();
+                    if(isset(($name)))
+                        $Phone->name = $name;
+    
+                    if(isset($request->phone['number'][$key]))
+                        $Phone->number = $request->phone['number'][$key];
+    
+                    $Phone->branchId = $Branch->id;
+    
+                    $Phone->save();                   
+                }
+            }
+    
+
+
+            //Registro de Redes sociales
+    
+            if(isset($request->facebook)){
+                $SocialNetwork = new SocialNetwork();
+                $SocialNetworkType = SocialNetworkType::where('name','facebook')->first();
+                $SocialNetwork->socialNetworkTypeId = $SocialNetworkType->id;
+                $SocialNetwork->URL= $request->facebook;
+                $SocialNetwork->companyId = $Company->id;
+                $SocialNetwork->active = 1;
+                $SocialNetwork->save();
+            }
+    
+            if(isset($request->twitter)){
+                $SocialNetwork = new SocialNetwork();
+                $SocialNetworkType = SocialNetworkType::where('name','twitter')->first();
+                $SocialNetwork->socialNetworkTypeId = $SocialNetworkType->id;
+                $SocialNetwork->URL= $request->twitter;
+                $SocialNetwork->companyId = $Company->id;
+                $SocialNetwork->active = 1;
+                $SocialNetwork->save();
+            }
+    
+            if(isset($request->instagram)){
+                $SocialNetwork = new SocialNetwork();
+                $SocialNetworkType = SocialNetworkType::where('name','instagram')->first();
+                $SocialNetwork->socialNetworkTypeId = $SocialNetworkType->id;
+                $SocialNetwork->URL= $request->instagram;
+                $SocialNetwork->companyId = $Company->id;
+                $SocialNetwork->active = 1;
+                $SocialNetwork->save();
+            }
+    
+            if(isset($request->youtube)){
+                $SocialNetwork = new SocialNetwork();
+                $SocialNetworkType = SocialNetworkType::where('name','youtube')->first();
+                $SocialNetwork->socialNetworkTypeId = $SocialNetworkType->id;
+                $SocialNetwork->URL= $request->youtube;
+                $SocialNetwork->companyId = $Company->id;
+                $SocialNetwork->active = 1;
+                $SocialNetwork->save();
+            }    
+
+
+            \DB::commit();
+
+            return redirect('companies')->with('Message', 'Compañia creada correctamente');
         }
-
-
-        //Registro de Redes sociales
-
-        if(isset($request->facebook)){
-            $SocialNetwork = new SocialNetwork();
-            $SocialNetworkType = SocialNetworkType::where('name','facebook')->first();
-            $SocialNetwork->socialNetworkTypeId = $SocialNetworkType->id;
-            $SocialNetwork->URL= $request->facebook;
-            $SocialNetwork->companyId = $Company->id;
-            $SocialNetwork->active = 1;
-            $SocialNetwork->save();
+        catch(\Throwable $th){
+            dd($th);
+            \DB::rollback();
+            //return redirect()->back()->with('error', 'Error al guardar la información.' . $th->getMessage());
         }
+       
 
-        if(isset($request->twitter)){
-            $SocialNetwork = new SocialNetwork();
-            $SocialNetworkType = SocialNetworkType::where('name','twitter')->first();
-            $SocialNetwork->socialNetworkTypeId = $SocialNetworkType->id;
-            $SocialNetwork->URL= $request->twitter;
-            $SocialNetwork->companyId = $Company->id;
-            $SocialNetwork->active = 1;
-            $SocialNetwork->save();
-        }
-
-        if(isset($request->instagram)){
-            $SocialNetwork = new SocialNetwork();
-            $SocialNetworkType = SocialNetworkType::where('name','instagram')->first();
-            $SocialNetwork->socialNetworkTypeId = $SocialNetworkType->id;
-            $SocialNetwork->URL= $request->instagram;
-            $SocialNetwork->companyId = $Company->id;
-            $SocialNetwork->active = 1;
-            $SocialNetwork->save();
-        }
-
-        if(isset($request->youtube)){
-            $SocialNetwork = new SocialNetwork();
-            $SocialNetworkType = SocialNetworkType::where('name','youtube')->first();
-            $SocialNetwork->socialNetworkTypeId = $SocialNetworkType->id;
-            $SocialNetwork->URL= $request->youtube;
-            $SocialNetwork->companyId = $Company->id;
-            $SocialNetwork->active = 1;
-            $SocialNetwork->save();
-        }    
-
-        return redirect('companies')->with('Message', 'Compañia creada correctamente');
+       
 
     }
 
