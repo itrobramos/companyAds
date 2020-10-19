@@ -58,7 +58,7 @@ class CompaniesController extends Controller
 
         $data['Countries'] = $Countries;
         $data['States'] = $States;
-        $data['Cities'] = $Cities;
+        $data['Cities'] = $Cities; 
         $data['Categories'] = $Categories;
         $data['Subcategories'] = $Subcategories;
         

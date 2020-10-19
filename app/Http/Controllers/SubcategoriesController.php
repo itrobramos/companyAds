@@ -100,7 +100,7 @@ class SubcategoriesController extends Controller
         return redirect('subcategories')->with('Message', 'Subcategoría eliminada correctamente');
     }
 
-    public function getSubcategoriesByCategory($id){
+    public function getsubcategoriesByCategory($id){
         $subcategories = Subcategory::where('CategoryId', $id)->select('id','name')->get();
         $subcategories = $subcategories->sortBy('name');
 

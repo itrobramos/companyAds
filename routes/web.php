@@ -53,4 +53,4 @@ Route::get('auth/{provider}/callback', 'Auth\SocialAuthController@handleProvider
 
 Route::get('/states/{id}', 'LocationController@getStatesByCountry');
 Route::get('/cities/{id}', 'LocationController@getcitiesByState');
-Route::get('/subcategories/{id}', 'SubcategoriesController@getSubcategoriesByCategory');
+Route::get('/subcategories/{id}', 'SubcategoriesController@getsubcategoriesByCategory');
